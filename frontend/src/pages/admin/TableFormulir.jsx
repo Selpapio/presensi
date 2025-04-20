@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { client } from "../../utils/axiosClient";
+import { toast } from "sonner";
 
 export default function TableFormulir() {
   const [data, setData] = useState([]);
@@ -9,7 +10,9 @@ export default function TableFormulir() {
       const res = (await client.get("/api/formulir-pengajuan")).data;
       setData(res.data);
     } catch (error) {
-      alert(error.message || "Terjadi kesalahan");
+      toast.error("Error", {
+        description: error?.msg || "Operasi gagal.",
+      });
     }
   };
 
@@ -22,9 +25,15 @@ export default function TableFormulir() {
         })
       ).data;
 
-      alert(res?.msg);
+      if (res) {
+        toast.success("Berhasil", {
+          description: "Pengajuan berhasil diterima!",
+        });
+      }
     } catch (error) {
-      alert(error.message || "Terjadi kesalahan");
+      toast.error("Error", {
+        description: error?.msg || "Operasi gagal.",
+      });
     } finally {
       getData();
     }
@@ -39,9 +48,15 @@ export default function TableFormulir() {
         })
       ).data;
 
-      alert(res?.msg);
+      if (res) {
+        toast.success("Berhasil", {
+          description: "Pengajuan berhasil ditolak!",
+        });
+      }
     } catch (error) {
-      alert(error.message || "Terjadi kesalahan");
+      toast.error("Error", {
+        description: error?.msg || "Operasi gagal.",
+      });
     } finally {
       getData();
     }
@@ -51,10 +66,16 @@ export default function TableFormulir() {
     if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
         const res = (await client.delete(`/api/formulir-pengajuan/${id}`)).data;
-        alert(res?.msg || "Data berhasil dihapus");
+        if (res) {
+          toast.success("Berhasil", {
+            description: "Pengajuan berhasil dihapus!",
+          });
+        }
       } catch (error) {
         console.error("Error deleting data:", error);
-        alert(error.message || "Terjadi kesalahan");
+        toast.error("Error", {
+          description: error?.msg || "Operasi gagal.",
+        });
       } finally {
         getData();
       }
@@ -65,12 +86,11 @@ export default function TableFormulir() {
     getData();
   }, []);
 
-  // Function to determine status color
   const getStatusColor = (status) => {
     switch (status) {
       case "ditolak":
         return "bg-red-500 text-white";
-      case "disetujui":
+      case "diterima":
         return "bg-green-700 text-white";
       default:
         return "bg-gray-500 text-white";
@@ -78,10 +98,10 @@ export default function TableFormulir() {
   };
 
   return (
-    <div className="container mx-auto mt-8 px-4">
+    <div className="container mx-auto mt-8 w-[1000px]">
       <h1 className="text-2xl font-bold text-center mb-6">Daftar Pengajuan</h1>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
+      <div className="overflow-x-scroll">
+        <table className="w-full bg-white border border-gray-300 shadow-md rounded-lg">
           <thead>
             <tr className="bg-red-600 text-white">
               <th className="py-3 px-4 text-left">NIS</th>
@@ -117,18 +137,20 @@ export default function TableFormulir() {
                   {item.alasan}
                 </td>
                 <td className="border-b border-gray-200 py-3 px-4">
-                  {item.tgl_tidakhadir}
+                  {new Date(item.tgl_tidakhadir).toLocaleDateString()}
                 </td>
                 <td className="border-b border-gray-200 py-3 px-4">
                   {item.lampiran ? (
                     <a
-                    href={`/storage/${item.lampiran}`} // Or the correct base path
-                    target="_blank" // Good practice to open in new tab
-                    rel="noopener noreferrer" // Security measure
-                    className="text-blue-600 hover:underline" // Add styling
-                  >
-                    {item.lampiran} {/* Or maybe "Lihat Lampiran" */}
-                  </a>
+                      href={`${
+                        import.meta.env.VITE_PUBLIC_LARAVEL_URL
+                      }/storage/${item.lampiran}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 line-clamp-1 truncate w-[200px] hover:underline"
+                    >
+                      Lihat Lampiran
+                    </a>
                   ) : (
                     <span className="text-gray-500">Tidak Ada Lampiran</span>
                   )}
@@ -136,13 +158,13 @@ export default function TableFormulir() {
                 <td className="border-b border-gray-200 py-3 px-4">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                      item.persetujuan?.status_persetujuan 
+                      item.persetujuan?.status_persetujuan
                     )}`}
                   >
                     {item.persetujuan?.status_persetujuan ?? "Diproses"}
                   </span>
                 </td>
-                <td className="flex space-x-3 border-b border-gray-200 py-3 px-4">
+                <td className="flex h-full space-x-3 border-b border-gray-200 py-6 px-4">
                   <button
                     onClick={() => handleTolak(item.id)}
                     className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200 text-sm"
