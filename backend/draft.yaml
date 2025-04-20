@@ -1,0 +1,23 @@
+models:
+    Siswa:
+        id: id
+        nis: string unique
+        nama: string
+        kelas: enum:"1a","1b","2a","2b","3a","3b","4a","4b","5a","5b","6a","6b."
+    FormulirPengajuan:
+        id: false
+        id_pengajuan: bigIncrements
+        id_siswa: bigInteger index foreign:siswa.id
+        jenis_surat: enum:"sakit","izin"
+        alasan: text
+        tgl_tidakhadir: date
+        lampiran: string
+    Admin:
+        id: id
+        username: string
+        password: string
+    PersetujuanIzin:
+        id: false
+        id_persetujuan: bigIncrements
+        id_pengajuan: string foreign:formulir_pengajuan.id_pengajuan
+        status_persetujuan: enum:"diterima","ditolak"
