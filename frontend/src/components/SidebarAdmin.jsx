@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { navDataAdmin } from "../data/navAdmin";
 import { client } from "../utils/axiosClient";
+import { Button } from "./ui/button";
 
 export default function SidebarAdmin() {
   const handleLogout = async () => {
@@ -14,7 +15,7 @@ export default function SidebarAdmin() {
     }
   };
   return (
-    <aside className="flex flex-col w-64 min-h-screen text-white font-semibold bg-[#1F1F1F] shadow-lg">
+    <aside className="flex flex-col w-[300px] min-h-screen text-white font-semibold bg-[#1F1F1F] shadow-lg">
       <div className="flex items-center justify-center h-20 bg-[#272727] text-2xl font-bold border-b border-gray-700">
         ADMIN
       </div>
@@ -34,18 +35,12 @@ export default function SidebarAdmin() {
         </ul>
       </nav>
       <div className="border-t border-gray-700 py-4 px-4">
-        <button className="w-full flex items-center justify-center px-5 py-2   text-3xl bg-red-600 hover:bg-red-700 rounded-md transition-colors">
-          <span onClick={handleLogout} href="/Login.jsx" className="text-">
-            Logout
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          ></svg>
-        </button>
+        <Button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-700 w-full h-full text-lg"
+        >
+          Logout
+        </Button>
       </div>
     </aside>
   );

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { client } from "../utils/axiosClient";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Status() {
   const [nis, setNis] = useState("");
@@ -8,13 +12,31 @@ export default function Status() {
   const getData = async (id) => {
     try {
       const res = (await client.get(`/api/formulir-pengajuan/${id}`)).data;
+      if (Array.isArray(data) && data.length < 1) {
+        toast.error("Gagal Mendapatkan Data", {
+          description: "Data rekor tidak kosong, atau siswa tidak ditemukan.",
+        });
+      } else {
+        toast.success("Berhasil", {
+          description: "Data rekor berhasil diambil.",
+        });
+      }
+
       setData(res.data);
     } catch (error) {
-      alert(error.response.data.message || "Terjadi kesalahan");
+      if (error?.response?.status === 401) {
+        toast.error("Input Tidak Lengkap", {
+          description: "NIS Wajib diisi.",
+        });
+        return;
+      }
+
+      toast.error("Gagal Mengajukan", {
+        description:
+          error?.response?.data?.msg || "Terjadi kesalahan pada server.",
+      });
     }
   };
-
-  
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case "ditolak":
@@ -29,49 +51,32 @@ export default function Status() {
   };
 
   return (
-    <div>
-      <section className="p-6 bg-gradient-to-r from-red-600 to-red-800 rounded-lg shadow-xl mb-8">
-        <div className="flex items-center space-x-6 container mx-auto">
-          <img
-            className="w-24 h-24 object-cover rounded-full border-4 border-white"
-            src="logo-sekolah.jpg"
-            alt="Logo Sekolah"
-          />
-          <div className="space-y-2">
-            <h1 className="text-white text-3xl font-bold text-center">
-              Portal Surat Izin Sekolah
-            </h1>
-            <p className="text-white text-lg font-medium">
-              Sistem Pengajuan Surat Izin Tidak Masuk
-            </p>
-          </div>
-        </div>
-      </section>
-      <div>
-        <h2 className="text-center text-4xl font-semibold text-red-500 mb-6">
+    <Card>
+      <CardHeader>
+        <h2 className="text-center text-4xl font-semibold text-red-500">
           Periksa Status Pengajuan
         </h2>
-        <p className="py-5 pl-10 mb-5 text-2xl text-black">
+        <p className="pt-4 pb-5 pl-10 text-2xl text-black">
           Masukkan NIS untuk memeriksa status pengajuan surat.
         </p>
-        <div className="pl-10 flex space-x-5">
+        <div className="flex items-center pl-10 space-x-5">
           <input
             value={nis}
             onChange={(e) => setNis(e.target.value)}
             type="text"
             id="checkNIS"
             placeholder="Masukkan NIS"
-            className="items-center w-min-10 p-2 border rounded-lg focus:ring-gray-500 focus:border-blue-500"
+            className="items-center w-min p-2 border rounded-lg focus:ring-gray-500 focus:border-blue-500"
           />
-          <button
+          <Button
             onClick={() => getData(nis)}
-            className="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition duration-200"
+            className="bg-red-500 text-white px-5 py-2 h-full rounded-lg hover:bg-green-600 transition duration-200"
           >
             Cek Status
-          </button>
+          </Button>
         </div>
         <p id="statusMessage" className="mt-4"></p>
-      </div>
+      </CardHeader>
       <div className="container mx-auto mt-8 px-4">
         <h1 className="text-2xl font-bold text-center mb-6">
           Daftar Pengajuan
@@ -112,18 +117,18 @@ export default function Status() {
                   <td className="border-b border-gray-200 py-3 px-4">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                        item.persetujuan?.status_persetujuan 
+                        item.persetujuan?.status_persetujuan
                       )}`}
                     >
                       {item.persetujuan?.status_persetujuan ?? "Diproses"}
                     </span>
                   </td>
-                </tr>     
+                </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

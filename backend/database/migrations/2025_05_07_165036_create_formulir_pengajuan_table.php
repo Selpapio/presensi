@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('jenis_surat', ["sakit", "izin"]);
             $table->text('alasan');
             $table->date('tgl_tidakhadir');
-            $table->string('lampiran');
+            $table->string('lampiran')->nullable();
             $table->timestamps();
         });
     }

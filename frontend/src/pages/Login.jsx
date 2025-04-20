@@ -1,5 +1,7 @@
 import React from "react";
 import { client } from "../utils/axiosClient";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const handleLogin = async (e) => {
@@ -51,12 +53,23 @@ export default function Login() {
             />
           </div>
 
-          <button
-            type="submit"
-            className=" bg-red-600 text-white m py-3 font-bold px-5 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
-          >
-            Login
-          </button>
+          <section className="flex space-x-3">
+            <Button
+              type="submit"
+              className="bg-red-600 hover:bg-red-700 text-lg py-5 px-8"
+            >
+              Login
+            </Button>
+            <Link to="/">
+              <Button
+                type="submit"
+                variant={"outline"}
+                className="text-lg py-5 px-8"
+              >
+                Kembali
+              </Button>
+            </Link>
+          </section>
         </form>
       </div>
     </div>
