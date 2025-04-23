@@ -91,17 +91,17 @@ export default function TableFormulir() {
       case "ditolak":
         return "bg-red-500 text-white";
       case "diterima":
-        return "bg-green-700 text-white";
+        return "bg-green-500 text-white";
       default:
         return "bg-gray-500 text-white";
     }
   };
 
   return (
-    <div className="container mx-auto mt-8 w-[1000px]">
+    <div className="container mx-auto mt-8 px-4">
       <h1 className="text-2xl font-bold text-center mb-6">Daftar Pengajuan</h1>
-      <div className="overflow-x-scroll">
-        <table className="w-full bg-white border border-gray-300 shadow-md rounded-lg">
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
           <thead>
             <tr className="bg-red-600 text-white">
               <th className="py-3 px-4 text-left">NIS</th>
@@ -110,9 +110,9 @@ export default function TableFormulir() {
               <th className="py-3 px-4 text-left">Jenis Surat</th>
               <th className="py-3 px-4 text-left">Alasan</th>
               <th className="py-3 px-4 text-left">Tanggal Ketidakhadiran</th>
-              <th className="py-3 px-4 text-left">Lampiran</th>
-              <th className="py-3 px-4 text-left">Status</th>
-              <th className="py-3 px-4 text-left">Akses</th>
+              <th className="py-3 px-4 text-center">Lampiran</th>
+              <th className="py-3 px-4 text-center">Status</th>
+              <th className="py-3 px-4 text-center">Akses</th>
             </tr>
           </thead>
           <tbody>
@@ -147,7 +147,7 @@ export default function TableFormulir() {
                       }/storage/${item.lampiran}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 line-clamp-1 truncate w-[200px] hover:underline"
+                      className="text-blue-600 text-center line-clamp-1 truncate w-[200px] hover:underline"
                     >
                       Lihat Lampiran
                     </a>
@@ -161,7 +161,7 @@ export default function TableFormulir() {
                       item.persetujuan?.status_persetujuan
                     )}`}
                   >
-                    {item.persetujuan?.status_persetujuan ?? "Diproses"}
+                    {item.persetujuan?.status_persetujuan || "diproses"}
                   </span>
                 </td>
                 <td className="flex h-full space-x-3 border-b border-gray-200 py-6 px-4">

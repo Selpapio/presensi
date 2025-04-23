@@ -70,7 +70,7 @@ export default function Kontak() {
             <h3 className="text-xl font-medium text-red-800 mb-4">Lokasi</h3>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.209851038215!2d112.669389898377!3d-7.977249917130435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6286ef8da6779%3A0x8802167889fcf53f!2sSDN%20Madyopuro%205%20Malang!5e0!3m2!1sid!2sid!4v1741421763963!5m2!1sid!2sid"
-              className="w-full h-96 rounded-lg shadow-md border-2 border-red-200"
+              className="w-290 h-100 rounded-lg shadow-md border-2 border-red-200"
               allowFullScreen
               loading="fast"
               referrerPolicy="no-referrer-when-downgrade"

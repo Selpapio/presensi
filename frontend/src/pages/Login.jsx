@@ -60,15 +60,6 @@ export default function Login() {
             >
               Login
             </Button>
-            <Link to="/">
-              <Button
-                type="submit"
-                variant={"outline"}
-                className="text-lg py-5 px-8"
-              >
-                Kembali
-              </Button>
-            </Link>
           </section>
         </form>
       </div>
