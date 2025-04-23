@@ -113,7 +113,7 @@ class PengajuanController extends Controller
 
         // 2. Query FormulirPengajuan using the relationship
         // We want FormulirPengajuan records WHERE the related Siswa has the specified NIS.
-        $data = FormulirPengajuan::with('idSiswa') // Eager load the student details
+        $data = FormulirPengajuan::with(['idSiswa', 'persetujuan']) // Eager load the student details
             ->whereHas('idSiswa', function ($query) use ($nis) {
                 // This adds a condition on the related Siswa model
                 $query->where('nis', $nis);
